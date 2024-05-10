@@ -1,0 +1,15 @@
+spring:
+  profiles:
+    active: dev
+  application:
+    name: ORCI Duty Roster
+  ldap:
+    urls:
+      - ldap://192.168.1.12:389
+    base: DC=net,DC=orci
+    username: CN=Administrator,OU=ICT Unit,OU=Ocean Road Cancer Institute(ORCI),DC=net,DC=orci
+    password: mailBOX#3592
+jwt:
+  token:
+    expiration-time: 86400000
+    secret-key: 2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b
