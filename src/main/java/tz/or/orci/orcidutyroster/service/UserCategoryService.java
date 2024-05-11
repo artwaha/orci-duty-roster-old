@@ -57,6 +57,20 @@ public class UserCategoryService {
         );
     }
 
+    public GenericResponse<UserCategory> getAllUserCategoriesByDepartment(Long departmentId, int pageNumber, int pageSize) {
+        Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new EntityNotFoundException("Department with Id " + departmentId + " not found"));
+        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+        Page<UserCategory> userCategoryPage = userCategoryRepository.findByDepartment(department, pageable);
+        return utils.generateGenericResponse(
+                OK.value(),
+                userCategoryPage.getNumber(),
+                userCategoryPage.getSize(),
+                userCategoryPage.getTotalPages(),
+                userCategoryPage.getTotalElements(),
+                userCategoryPage.getContent()
+        );
+    }
+
     public UserCategory updateUserCategory(Long userCategoryId, UserCategoryDto userCategoryDto) {
         UserCategory savedUserCategory = userCategoryRepository.findById(userCategoryId).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + userCategoryId + " not found"));
 

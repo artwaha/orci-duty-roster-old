@@ -29,6 +29,14 @@ public interface UserCategoryController {
             @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
     );
 
+    @GetMapping("departments/{id}")
+    @Operation(summary = "Get User Categories by Department")
+    ResponseEntity<GenericResponse<UserCategory>> getAllUserCategoriesByDepartment(
+            @PathVariable @Valid Long id,
+            @Valid @RequestParam(defaultValue = "0", required = false) int pageNumber,
+            @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
+    );
+
     @PatchMapping("{id}")
     @Operation(summary = "Update User Category")
     ResponseEntity<UserCategory> updateUserCategory(

@@ -32,6 +32,11 @@ public class UserCategoryControllerImpl implements UserCategoryController {
     }
 
     @Override
+    public ResponseEntity<GenericResponse<UserCategory>> getAllUserCategoriesByDepartment(Long id, int pageNumber, int pageSize) {
+        return ResponseEntity.ok(userCategoryService.getAllUserCategoriesByDepartment(id, pageNumber, pageSize));
+    }
+
+    @Override
     public ResponseEntity<UserCategory> updateUserCategory(Long id, UserCategoryDto userCategoryDto) {
         return ResponseEntity.ok(userCategoryService.updateUserCategory(id, userCategoryDto));
     }
