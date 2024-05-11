@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,7 +32,8 @@ public interface AuthController {
     ResponseEntity<AuthResponseDto> selfRegister(@RequestBody @Valid SelfRegisterRequestDto registerRequest);
 
     @PostMapping("register-by-admin")
-    @Operation(summary = "Register by Admin")
+    @Operation(summary = "Register by Admin", description = "Admin Protected")
     @SecurityRequirement(name = "jwt")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<UserDto> registerByAdmin(@RequestBody @Valid RegisterByAdminRequestDto registerRequest);
 }

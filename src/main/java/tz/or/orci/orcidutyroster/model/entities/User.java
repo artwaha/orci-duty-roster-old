@@ -34,6 +34,9 @@ public class User extends AuditableWithUser implements UserDetails {
 
     private boolean active = false;
 
+    @ManyToOne
+    private Department department;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 

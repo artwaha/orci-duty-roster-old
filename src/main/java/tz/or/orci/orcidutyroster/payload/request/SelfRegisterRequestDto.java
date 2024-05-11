@@ -22,4 +22,6 @@ public class SelfRegisterRequestDto {
     @NotNull(message = "Role is Required")
     private RoleEnum role;
 
+    @NotNull(message = "Department is Required")
+    private Long departmentId;
 }

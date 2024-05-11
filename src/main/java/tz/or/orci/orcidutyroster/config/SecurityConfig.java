@@ -43,11 +43,12 @@ public class SecurityConfig {
                                     "/v3/api-docs/**",
                                     "/actuator/**",
                                     "/api/v1/auth/login",
-                                    "/api/v1/auth/self-register"
+                                    "/api/v1/auth/self-register",
+                                    "/api/v1/departments"
                             )
                             .permitAll();
                     requests
-                            .requestMatchers("/api/v1/auth/register-by-admin")
+                            .requestMatchers("/api/v1/user-categories/**")
                             .hasRole("ADMIN");
                     requests
                             .anyRequest()

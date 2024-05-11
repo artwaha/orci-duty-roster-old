@@ -80,6 +80,8 @@ public class Utils {
         userDto.setRoles(user.getRoles().stream().map(Role::getName).toList());
         if (user.getUserCategory() != null)
             userDto.setUserCategory(user.getUserCategory());
+        if (user.getDepartment() != null)
+            userDto.setDepartment(user.getDepartment());
         return userDto;
     }
 

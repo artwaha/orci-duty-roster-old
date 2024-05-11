@@ -1,6 +1,7 @@
 package tz.or.orci.orcidutyroster.payload.response;
 
 import lombok.Data;
+import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.UserCategory;
 import tz.or.orci.orcidutyroster.model.enums.RoleEnum;
 
@@ -16,5 +17,6 @@ public class UserDto {
     private String fullName;
     private boolean active;
     private UserCategory userCategory;
+    private Department department;
     private List<RoleEnum> roles;
 }

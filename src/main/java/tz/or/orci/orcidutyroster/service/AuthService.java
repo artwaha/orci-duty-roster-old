@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
 import org.springframework.stereotype.Service;
+import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Role;
 import tz.or.orci.orcidutyroster.model.entities.User;
 import tz.or.orci.orcidutyroster.model.entities.UserCategory;
@@ -18,6 +19,7 @@ import tz.or.orci.orcidutyroster.payload.request.SelfRegisterRequestDto;
 import tz.or.orci.orcidutyroster.payload.response.AuthResponseDto;
 import tz.or.orci.orcidutyroster.payload.response.UserDto;
 import tz.or.orci.orcidutyroster.payload.response.ValidationResult;
+import tz.or.orci.orcidutyroster.repository.DepartmentRepository;
 import tz.or.orci.orcidutyroster.repository.RoleRepository;
 import tz.or.orci.orcidutyroster.repository.UserCategoryRepository;
 import tz.or.orci.orcidutyroster.repository.UserRepository;
@@ -36,6 +38,7 @@ public class AuthService {
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
     private final UserCategoryRepository userCategoryRepository;
+    private final DepartmentRepository departmentRepository;
 
     public AuthResponseDto login(LoginRequestDto loginRequest) {
         User user = userRepository.findByUsernameIgnoreCase(loginRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -79,6 +82,9 @@ public class AuthService {
         Role userRole = roleRepository.findByName(registerRequest.getRole());
         newUser.setRoles(List.of(userRole));
 
+        Department department = departmentRepository.findById(registerRequest.getDepartmentId()).orElseThrow(() -> new EntityNotFoundException("Department with Id " + registerRequest.getDepartmentId() + " not found"));
+        newUser.setDepartment(department);
+
         User savedUser = userRepository.save(newUser);
 
         String accessToken = jwtService.generateToken(savedUser);
@@ -112,6 +118,9 @@ public class AuthService {
         User newUser = modelMapper.map(registerRequest, User.class);
 
         newUser.setActive(true);
+
+        Department department = departmentRepository.findById(registerRequest.getDepartmentId()).orElseThrow(() -> new EntityNotFoundException("Department with Id " + registerRequest.getDepartmentId() + " not found"));
+        newUser.setDepartment(department);
 
         if (registerRequest.getUserCategoryId() != null) {
             UserCategory userCategory = userCategoryRepository.findById(registerRequest.getUserCategoryId()).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + registerRequest.getUserCategoryId() + " not found."));

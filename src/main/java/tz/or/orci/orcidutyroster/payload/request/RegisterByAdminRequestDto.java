@@ -2,6 +2,7 @@ package tz.or.orci.orcidutyroster.payload.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +24,9 @@ public class RegisterByAdminRequestDto {
 
     @NotEmpty(message = "User must be assigned at least one role")
     private List<RoleEnum> roles;
+
+    @NotNull(message = "Department is Required")
+    private Long departmentId;
 
     private Long userCategoryId;
 }

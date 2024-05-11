@@ -1,9 +1,13 @@
 package tz.or.orci.orcidutyroster.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Role;
+import tz.or.orci.orcidutyroster.payload.request.DepartmentRequestDto;
 import tz.or.orci.orcidutyroster.payload.request.RegisterByAdminRequestDto;
+import tz.or.orci.orcidutyroster.repository.DepartmentRepository;
 import tz.or.orci.orcidutyroster.repository.RoleRepository;
 import tz.or.orci.orcidutyroster.repository.UserRepository;
 
@@ -17,6 +21,8 @@ public class DataInitService {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
+    private final DepartmentRepository departmentRepository;
+    private final DepartmentService departmentService;
 
     public void addDefaultRoles() {
         if (!roleRepository.existsByName(ADMIN))
@@ -38,12 +44,25 @@ public class DataInitService {
             roleRepository.save(Role.builder().name(INTERN).description(INTERN.name()).build());
     }
 
+    public void addDefaultDepartments() {
+        if (!departmentRepository.existsByNameIgnoreCase("Default Department")) {
+            departmentService.addDepartment(
+                    DepartmentRequestDto
+                            .builder()
+                            .name("Default Department")
+                            .build()
+            );
+        }
+    }
+
     public void addDefaultUsers() {
         if (!userRepository.existsByUsernameIgnoreCase("james.bond")) {
+            Department department = departmentRepository.findByNameIgnoreCase("Default Department").orElseThrow(() -> new EntityNotFoundException("Department with Name 'Default Department' not found"));
             RegisterByAdminRequestDto jamesBondRequest = RegisterByAdminRequestDto
                     .builder()
                     .username("James.bond")
                     .fullName("James Bond")
+                    .departmentId(department.getId())
                     .roles(List.of(STAFF, ADMIN))
                     .build();
             authService.registerByAdmin(jamesBondRequest);
