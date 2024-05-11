@@ -11,6 +11,12 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import tz.or.orci.orcidutyroster.model.entities.Token;
+import tz.or.orci.orcidutyroster.repository.TokenRepository;
+import tz.or.orci.orcidutyroster.security.JwtAuthenticationFilter;
+
+import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.*;
 
@@ -19,19 +25,16 @@ import static org.springframework.http.HttpStatus.*;
 @EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
+    private final TokenRepository tokenRepository;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     @Value("${spring.ldap.urls[0]}")
     private String ldapUrl;
-
-    @Bean
-    public ActiveDirectoryLdapAuthenticationProvider authenticationProvider() {
-        return new ActiveDirectoryLdapAuthenticationProvider("net.orci", ldapUrl);
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
         http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.authorizeHttpRequests(
                 requests -> {
                     requests
@@ -43,6 +46,9 @@ public class SecurityConfig {
                                     "/api/v1/auth/self-register"
                             )
                             .permitAll();
+                    requests
+                            .requestMatchers("/api/v1/auth/register-by-admin")
+                            .hasRole("ADMIN");
                     requests
                             .anyRequest()
                             .authenticated();
@@ -64,18 +70,23 @@ public class SecurityConfig {
                 if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                     return;
                 }
-//                String token = authHeader.substring(7);
-//                Optional<Token> storedTokenOptional = tokenRepository.findByToken(token);
-//
-//                if (storedTokenOptional.isPresent()) {
-//                    Token storedToken = storedTokenOptional.get();
-//                    storedToken.setRevoked(true);
-//                    tokenRepository.save(storedToken);
-//                }
+                String token = authHeader.substring(7);
+                Optional<Token> storedTokenOptional = tokenRepository.findByToken(token);
+
+                if (storedTokenOptional.isPresent()) {
+                    Token storedToken = storedTokenOptional.get();
+                    storedToken.setRevoked(true);
+                    tokenRepository.save(storedToken);
+                }
             });
             logout.logoutSuccessHandler((request, response, authentication) -> response.setStatus(OK.value()));
         });
 
         return http.build();
+    }
+
+    @Bean
+    public ActiveDirectoryLdapAuthenticationProvider authenticationProvider() {
+        return new ActiveDirectoryLdapAuthenticationProvider("net.orci", ldapUrl);
     }
 }
