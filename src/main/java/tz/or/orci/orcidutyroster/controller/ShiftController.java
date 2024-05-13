@@ -7,43 +7,43 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import tz.or.orci.orcidutyroster.model.entities.UserCategory;
-import tz.or.orci.orcidutyroster.payload.request.UserCategoryDto;
+import tz.or.orci.orcidutyroster.model.entities.Shift;
+import tz.or.orci.orcidutyroster.payload.request.ShiftDto;
 import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
 
-@RequestMapping("api/v1/user-categories")
-@Tag(name = "User Category Controller")
+@RequestMapping("api/v1/shifts")
+@Tag(name = "Shift Controller")
 @SecurityRequirement(name = "jwt")
-public interface UserCategoryController {
+public interface ShiftController {
     @PostMapping()
-    @Operation(summary = "Add User Category", description = "Admin Protected")
+    @Operation(summary = "Add Shift", description = "Admin Protected")
     @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<UserCategory> addUserCategory(@Valid @RequestBody UserCategoryDto userCategoryDto);
+    ResponseEntity<Shift> addShift(@Valid @RequestBody ShiftDto shiftDto);
 
     @GetMapping("{id}")
-    @Operation(summary = "Get User Categories by Id")
-    ResponseEntity<UserCategory> getUserCategoryById(@PathVariable @Valid Long id);
+    @Operation(summary = "Get Shift by Id")
+    ResponseEntity<Shift> getShiftById(@PathVariable @Valid Long id);
 
     @GetMapping()
-    @Operation(summary = "Get All User Categories")
-    ResponseEntity<GenericResponse<UserCategory>> getAllUserCategories(
+    @Operation(summary = "Get All Shifts")
+    ResponseEntity<GenericResponse<Shift>> getAllShifts(
             @Valid @RequestParam(defaultValue = "0", required = false) int pageNumber,
             @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
     );
 
     @GetMapping("departments/{id}")
-    @Operation(summary = "Get User Categories by Department")
-    ResponseEntity<GenericResponse<UserCategory>> getAllUserCategoriesByDepartment(
+    @Operation(summary = "Get Shifts by Department")
+    ResponseEntity<GenericResponse<Shift>> getAllShiftsByDepartment(
             @PathVariable @Valid Long id,
             @Valid @RequestParam(defaultValue = "0", required = false) int pageNumber,
             @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
     );
 
     @PatchMapping("{id}")
-    @Operation(summary = "Update User Category", description = "Admin Protected")
+    @Operation(summary = "Update Shift", description = "Admin Protected")
     @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<UserCategory> updateUserCategory(
+    ResponseEntity<Shift> updateShift(
             @Valid @PathVariable Long id,
-            @Valid @RequestBody UserCategoryDto userCategoryDto
+            @Valid @RequestBody ShiftDto shiftDto
     );
 }

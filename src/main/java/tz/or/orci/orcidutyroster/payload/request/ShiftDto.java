@@ -6,13 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO for {@link tz.or.orci.orcidutyroster.model.entities.Workstation}
+ * DTO for {@link tz.or.orci.orcidutyroster.model.entities.Shift}
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class WorkstationDto {
+public class ShiftDto {
     private String name;
+    private String description;
     private Long departmentId;
 }

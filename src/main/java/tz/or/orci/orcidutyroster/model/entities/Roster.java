@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import tz.or.orci.orcidutyroster.model.auditable.AuditableWithUser;
+import tz.or.orci.orcidutyroster.model.enums.RosterDurationEnum;
+import tz.or.orci.orcidutyroster.model.enums.RosterStatusEnum;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,14 +25,20 @@ public class Roster extends AuditableWithUser {
     @Column(nullable = false)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn
-    private RosterDuration duration;
+    @Enumerated(EnumType.STRING)
+    private RosterDurationEnum durationType;
+
+    private LocalDate startDate;
+
+    private LocalDate endDate;
 
     @ManyToOne
     private Workstation workstation;
 
-    @OneToMany(mappedBy = "roster", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Enumerated(EnumType.STRING)
+    private RosterStatusEnum rosterStatus;
+
+    @OneToMany(mappedBy = "roster", cascade = CascadeType.ALL)
     @JsonManagedReference
     private List<ShiftAssignment> shiftAssignments = new ArrayList<>();
 

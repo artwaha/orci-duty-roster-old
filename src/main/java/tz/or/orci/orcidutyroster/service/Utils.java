@@ -7,7 +7,8 @@ import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import tz.or.orci.orcidutyroster.model.entities.Role;
+import tz.or.orci.orcidutyroster.model.entities.Roster;
+import tz.or.orci.orcidutyroster.model.entities.RosterTracking;
 import tz.or.orci.orcidutyroster.model.entities.Token;
 import tz.or.orci.orcidutyroster.model.entities.User;
 import tz.or.orci.orcidutyroster.model.enums.RoleEnum;
@@ -15,6 +16,7 @@ import tz.or.orci.orcidutyroster.payload.response.ErrorResponseDto;
 import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
 import tz.or.orci.orcidutyroster.payload.response.UserDto;
 import tz.or.orci.orcidutyroster.payload.response.ValidationResult;
+import tz.or.orci.orcidutyroster.repository.RosterTrackingRepository;
 import tz.or.orci.orcidutyroster.repository.TokenRepository;
 
 import java.util.List;
@@ -28,6 +30,7 @@ public class Utils {
     private final LdapTemplate ldapTemplate;
     private final TokenRepository tokenRepository;
     private final ModelMapper modelMapper;
+    private final RosterTrackingRepository rosterTrackingRepository;
 
     public User getAuthenticatedUser() {
         return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -51,6 +54,25 @@ public class Utils {
         List<Token> allTokensByUser = tokenRepository.findByUserAndRevokedFalse(user);
         allTokensByUser.forEach(token -> token.setRevoked(true));
         tokenRepository.saveAll(allTokensByUser);
+    }
+
+    public void saveRosterTrackingDetails(Roster roster, String remarks) {
+        RosterTracking rosterTracking;
+        if (remarks != null)
+            rosterTracking = RosterTracking
+                    .builder()
+                    .roster(roster)
+                    .status(roster.getRosterStatus())
+                    .remarks(remarks)
+                    .build();
+        else
+            rosterTracking = RosterTracking
+                    .builder()
+                    .roster(roster)
+                    .status(roster.getRosterStatus())
+                    .build();
+
+        rosterTrackingRepository.save(rosterTracking);
     }
 
     public ErrorResponseDto generateErrorResponse(HttpStatus status, String path, String message, Map<String, String> details) {
@@ -77,7 +99,7 @@ public class Utils {
 
     public UserDto userEntityToUserDto(User user) {
         UserDto userDto = modelMapper.map(user, UserDto.class);
-        userDto.setRoles(user.getRoles().stream().map(Role::getName).toList());
+        userDto.setRoles(user.getRoles());
         if (user.getUserCategory() != null)
             userDto.setUserCategory(user.getUserCategory());
         if (user.getDepartment() != null)

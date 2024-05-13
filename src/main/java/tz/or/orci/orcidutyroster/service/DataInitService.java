@@ -26,22 +26,22 @@ public class DataInitService {
 
     public void addDefaultRoles() {
         if (!roleRepository.existsByName(ADMIN))
-            roleRepository.save(Role.builder().name(ADMIN).description(ADMIN.name()).build());
+            roleRepository.save(Role.builder().name(ADMIN).description("Admin").build());
 
         if (!roleRepository.existsByName(HEAD_OF_DEPARTMENT))
-            roleRepository.save(Role.builder().name(HEAD_OF_DEPARTMENT).description(HEAD_OF_DEPARTMENT.name()).build());
+            roleRepository.save(Role.builder().name(HEAD_OF_DEPARTMENT).description("Head of Department").build());
 
         if (!roleRepository.existsByName(SUPERVISOR))
-            roleRepository.save(Role.builder().name(SUPERVISOR).description(SUPERVISOR.name()).build());
+            roleRepository.save(Role.builder().name(SUPERVISOR).description("Supervisor").build());
 
         if (!roleRepository.existsByName(STAFF))
-            roleRepository.save(Role.builder().name(STAFF).description(STAFF.name()).build());
+            roleRepository.save(Role.builder().name(STAFF).description("Staff").build());
 
         if (!roleRepository.existsByName(VOLUNTEER))
-            roleRepository.save(Role.builder().name(VOLUNTEER).description(VOLUNTEER.name()).build());
+            roleRepository.save(Role.builder().name(VOLUNTEER).description("Volunteer").build());
 
         if (!roleRepository.existsByName(INTERN))
-            roleRepository.save(Role.builder().name(INTERN).description(INTERN.name()).build());
+            roleRepository.save(Role.builder().name(INTERN).description("Intern").build());
     }
 
     public void addDefaultDepartments() {
