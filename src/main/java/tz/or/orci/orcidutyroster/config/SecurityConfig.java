@@ -44,7 +44,8 @@ public class SecurityConfig {
                                     "/actuator/**",
                                     "/api/v1/auth/login",
                                     "/api/v1/auth/self-register",
-                                    "/api/v1/departments"
+                                    "/api/v1/departments",
+                                    "api/v1/roles"
                             )
                             .permitAll();
                     requests

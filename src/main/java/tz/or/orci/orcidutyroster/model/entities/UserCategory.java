@@ -1,5 +1,6 @@
 package tz.or.orci.orcidutyroster.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,7 @@ public class UserCategory {
     private String name;
 
     @ManyToOne
+    @JsonBackReference
     private Department department;
 
 }

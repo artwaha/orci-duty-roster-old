@@ -1,7 +1,10 @@
 package tz.or.orci.orcidutyroster.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -17,4 +20,9 @@ public class Department {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "department")
+    @JsonManagedReference
+    private List<UserCategory> userCategories;
+
 }

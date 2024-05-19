@@ -13,11 +13,9 @@ import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
 
 @RequestMapping("api/v1/roles")
 @Tag(name = "Role Controller")
-@SecurityRequirement(name = "jwt")
 public interface RoleController {
     @GetMapping()
-    @Operation(summary = "Get All Roles", description = "Admin | Supervisor | HOD Protected")
-    @PreAuthorize("hasAnyRole('ADMIN','SUPERVISOR','HEAD_OF_DEPARTMENT')")
+    @Operation(summary = "Get All Roles")
     ResponseEntity<GenericResponse<Role>> getAllRoles(
             @Valid @RequestParam(defaultValue = "0", required = false) int pageNumber,
             @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
@@ -25,6 +23,7 @@ public interface RoleController {
 
     @PatchMapping("{id}")
     @Operation(summary = "Update Role", description = "Admin Protected")
+    @SecurityRequirement(name = "jwt")
     @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Role> updateRole(
             @Valid @PathVariable Long id,
