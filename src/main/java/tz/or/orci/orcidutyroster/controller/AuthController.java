@@ -29,7 +29,7 @@ public interface AuthController {
 
     @PostMapping("self-register")
     @Operation(summary = "Self-registration")
-    ResponseEntity<AuthResponseDto> selfRegister(@RequestBody @Valid SelfRegisterRequestDto registerRequest);
+    ResponseEntity<UserDto> selfRegister(@RequestBody @Valid SelfRegisterRequestDto registerRequest);
 
     @PostMapping("register-by-admin")
     @Operation(summary = "Register by Admin", description = "Admin Protected")

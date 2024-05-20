@@ -61,7 +61,7 @@ public class AuthService {
                 .build();
     }
 
-    public AuthResponseDto selfRegister(SelfRegisterRequestDto registerRequest) {
+    public UserDto selfRegister(SelfRegisterRequestDto registerRequest) {
         boolean usernameIsValid = utils.userExistsInActiveDirectory(registerRequest.getUsername());
 
         if (!usernameIsValid)
@@ -87,16 +87,7 @@ public class AuthService {
 
         User savedUser = userRepository.save(newUser);
 
-        String accessToken = jwtService.generateToken(savedUser);
-
-        utils.revokeAllUserTokens(savedUser);
-
-        utils.saveUserToken(accessToken, savedUser);
-
-        return AuthResponseDto
-                .builder()
-                .accessToken(accessToken)
-                .build();
+        return utils.userEntityToUserDto(savedUser);
     }
 
     public UserDto registerByAdmin(RegisterByAdminRequestDto registerRequest) {

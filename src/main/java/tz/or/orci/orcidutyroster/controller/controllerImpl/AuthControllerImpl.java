@@ -29,7 +29,7 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @Override
-    public ResponseEntity<AuthResponseDto> selfRegister(SelfRegisterRequestDto registerRequest) {
+    public ResponseEntity<UserDto> selfRegister(SelfRegisterRequestDto registerRequest) {
         return ResponseEntity.ok(authService.selfRegister(registerRequest));
     }
 
