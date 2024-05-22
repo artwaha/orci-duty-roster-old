@@ -20,7 +20,7 @@ public interface UserController {
     @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<UserDto> getUserById(@PathVariable @Valid Long id);
 
-    @GetMapping("users")
+    @GetMapping()
     @Operation(summary = "Get Users", description = "Admin, Supervisor & HOD Protected")
     @PreAuthorize("hasAnyRole('ADMIN','SUPERVISOR','HEAD_OF_DEPARTMENT')")
     ResponseEntity<GenericResponse<UserDto>> getUsers(

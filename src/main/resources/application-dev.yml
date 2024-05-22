@@ -8,11 +8,11 @@ spring:
     password: 206207
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
-    show-sql: true
+    show-sql: false
 #logging:
 #  level:
 #    web: trace
