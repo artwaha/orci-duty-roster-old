@@ -17,7 +17,7 @@ import tz.or.orci.orcidutyroster.payload.response.UserDto;
 public interface UserController {
     @GetMapping("{id}")
     @Operation(summary = "Get User by Id", description = "Admin Protected")
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN','SUPERVISOR','HEAD_OF_DEPARTMENT')")
     ResponseEntity<UserDto> getUserById(@PathVariable @Valid Long id);
 
     @GetMapping()
