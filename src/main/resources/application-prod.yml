@@ -1,0 +1,12 @@
+server:
+  port: 2026
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://192.168.1.8:5432/orci-duty-roster
+    username: postgres
+    password: Fsa01b2020
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
