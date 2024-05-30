@@ -31,14 +31,6 @@ public interface WorkstationController {
             @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
     );
 
-    @GetMapping("departments/{id}")
-    @Operation(summary = "Get Workstations by Department")
-    ResponseEntity<GenericResponse<Workstation>> getAllWorkstationsByDepartment(
-            @PathVariable @Valid Long id,
-            @Valid @RequestParam(defaultValue = "0", required = false) int pageNumber,
-            @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
-    );
-
     @PatchMapping("{id}")
     @Operation(summary = "Update Workstation", description = "Admin Protected")
     @PreAuthorize("hasRole('ADMIN')")

@@ -32,11 +32,6 @@ public class WorkstationControllerImpl implements WorkstationController {
     }
 
     @Override
-    public ResponseEntity<GenericResponse<Workstation>> getAllWorkstationsByDepartment(Long id, int pageNumber, int pageSize) {
-        return ResponseEntity.ok(workstationService.getAllWorkstationsByDepartment(id, pageNumber, pageSize));
-    }
-
-    @Override
     public ResponseEntity<Workstation> updateWorkstation(Long id, WorkstationDto workstationDto) {
         return ResponseEntity.ok(workstationService.updateWorkstation(id, workstationDto));
     }

@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Workstation;
 import tz.or.orci.orcidutyroster.payload.request.WorkstationDto;
 import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
@@ -29,14 +28,11 @@ public class WorkstationService {
     private final Utils utils;
 
     public Workstation addWorkstation(WorkstationDto workstationDto) {
-        Department department = departmentRepository.findById(workstationDto.getDepartmentId()).orElseThrow(() -> new EntityNotFoundException("Department with Id " + workstationDto.getDepartmentId() + " not found"));
-
-        Optional<Workstation> workstationOptional = workstationRepository.findByNameIgnoreCase(workstationDto.getName());
+        Optional<Workstation> workstationOptional = workstationRepository.findByName(workstationDto.getName());
         if (workstationOptional.isPresent())
             throw new CustomException("Workstation with name " + workstationDto.getName() + " Already Exists");
 
         Workstation workstation = modelMapper.map(workstationDto, Workstation.class);
-        workstation.setDepartment(department);
 
         return workstationRepository.save(workstation);
     }
@@ -58,30 +54,17 @@ public class WorkstationService {
         );
     }
 
-    public GenericResponse<Workstation> getAllWorkstationsByDepartment(Long departmentId, int pageNumber, int pageSize) {
-        Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new EntityNotFoundException("Department with Id " + departmentId + " not found"));
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Workstation> workstationPage = workstationRepository.findByDepartment(department, pageable);
-        return utils.generateGenericResponse(
-                OK.value(),
-                workstationPage.getNumber(),
-                workstationPage.getSize(),
-                workstationPage.getTotalPages(),
-                workstationPage.getTotalElements(),
-                workstationPage.getContent()
-        );
-    }
-
     public Workstation updateWorkstation(Long workstationId, WorkstationDto workstationDto) {
         Workstation savedWorkstation = workstationRepository.findById(workstationId).orElseThrow(() -> new EntityNotFoundException("Workstation with Id " + workstationId + " not found"));
 
-        if (workstationDto.getDepartmentId() != null) {
-            Department department = departmentRepository.findById(workstationDto.getDepartmentId()).orElseThrow(() -> new EntityNotFoundException("Department with Id " + workstationDto.getDepartmentId() + " not found"));
-            savedWorkstation.setDepartment(department);
-        }
+        if (workstationDto.getDescription() != null)
+            workstationDto.setDescription(workstationDto.getDescription());
+
+        if (workstationDto.getInformation() != null)
+            workstationDto.setInformation(workstationDto.getInformation());
 
         if (workstationDto.getName() != null) {
-            Optional<Workstation> workstationOptional = workstationRepository.findByNameIgnoreCase(workstationDto.getName());
+            Optional<Workstation> workstationOptional = workstationRepository.findByName(workstationDto.getName());
             if (workstationOptional.isPresent())
                 throw new CustomException("Workstation with name " + workstationDto.getName() + " already Exists");
             savedWorkstation.setName(workstationDto.getName());

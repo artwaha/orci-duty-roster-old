@@ -4,12 +4,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import tz.or.orci.orcidutyroster.model.entities.Department;
-import tz.or.orci.orcidutyroster.model.entities.UserCategory;
+import tz.or.orci.orcidutyroster.model.entities.Designation;
 
 import java.util.Optional;
 
-public interface UserCategoryRepository extends JpaRepository<UserCategory, Long> {
-    Optional<UserCategory> findByNameIgnoreCase(String name);
+public interface UserCategoryRepository extends JpaRepository<Designation, Long> {
+    Optional<Designation> findByNameIgnoreCase(String name);
 
-    Page<UserCategory> findByDepartment(Department department, Pageable pageable);
+    Page<Designation> findByDepartment(Department department, Pageable pageable);
 }

@@ -22,6 +22,7 @@ import java.util.List;
 public class User extends AuditableWithUser implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false)
     private Long id;
 
     @Column(unique = true)
@@ -30,15 +31,22 @@ public class User extends AuditableWithUser implements UserDetails {
     private String fullName;
 
     @ManyToOne
-    private UserCategory userCategory;
+    @JoinColumn
+    private Designation designation;
 
+    @Column(nullable = false)
     private boolean active = false;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private List<Role> roles;
 
     @ManyToOne
     private Department department;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    private List<Workstation> workstations = new ArrayList<>();
+
+    /* UserDetails Implementations 👇 */
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

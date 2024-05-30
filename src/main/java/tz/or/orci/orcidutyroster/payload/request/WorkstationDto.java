@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
 
 /**
  * DTO for {@link tz.or.orci.orcidutyroster.model.entities.Workstation}
@@ -13,6 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class WorkstationDto {
-    private String name;
-    private Long departmentId;
+    private WorkstationEnum name;
+    private String description;
+    private String information;
 }

@@ -1,6 +1,5 @@
 package tz.or.orci.orcidutyroster.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,16 +10,11 @@ import lombok.*;
 @Setter
 
 @Entity
-@Table(name = "user_categories")
-public class UserCategory {
+@Table(name = "designations")
+public class Designation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
-
-    @ManyToOne
-    @JsonBackReference
-    private Department department;
-
 }

@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tz.or.orci.orcidutyroster.model.enums.ShiftEnum;
 
 /**
  * DTO for {@link tz.or.orci.orcidutyroster.model.entities.Shift}
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShiftDto {
-    private String name;
+    private ShiftEnum name;
     private String description;
-    private Long departmentId;
+    private String information;
 }

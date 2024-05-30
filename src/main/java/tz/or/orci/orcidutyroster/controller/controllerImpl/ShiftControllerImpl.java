@@ -32,11 +32,6 @@ public class ShiftControllerImpl implements ShiftController {
     }
 
     @Override
-    public ResponseEntity<GenericResponse<Shift>> getAllShiftsByDepartment(Long id, int pageNumber, int pageSize) {
-        return ResponseEntity.ok(shiftService.getAllShiftsByDepartment(id, pageNumber, pageSize));
-    }
-
-    @Override
     public ResponseEntity<Shift> updateShift(Long id, ShiftDto shiftDto) {
         return ResponseEntity.ok(shiftService.updateShift(id, shiftDto));
     }

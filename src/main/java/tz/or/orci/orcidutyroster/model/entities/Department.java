@@ -1,9 +1,10 @@
 package tz.or.orci.orcidutyroster.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+import tz.or.orci.orcidutyroster.model.enums.DepartmentEnum;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -19,10 +20,16 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private DepartmentEnum name;
 
-    @OneToMany(mappedBy = "department")
-    @JsonManagedReference
-    private List<UserCategory> userCategories;
+    @ManyToMany
+    private List<Designation> designations = new ArrayList<>();
+
+    @ManyToMany
+    private List<Shift> shifts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Workstation> workstations = new ArrayList<>();
 
 }

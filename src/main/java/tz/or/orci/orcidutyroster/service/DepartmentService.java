@@ -1,19 +1,14 @@
 package tz.or.orci.orcidutyroster.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import tz.or.orci.orcidutyroster.model.entities.Department;
-import tz.or.orci.orcidutyroster.payload.request.DepartmentRequestDto;
+import tz.or.orci.orcidutyroster.model.enums.DepartmentEnum;
 import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
 import tz.or.orci.orcidutyroster.repository.DepartmentRepository;
-import tz.or.orci.orcidutyroster.security.CustomException;
-
-import java.util.Optional;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -21,19 +16,13 @@ import static org.springframework.http.HttpStatus.OK;
 @RequiredArgsConstructor
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
-    private final ModelMapper modelMapper;
     private final Utils utils;
 
-    public Department addDepartment(DepartmentRequestDto departmentRequestDto) {
-        Optional<Department> departmentOptional = departmentRepository.findByNameIgnoreCase(departmentRequestDto.getName());
-        if (departmentOptional.isPresent())
-            throw new CustomException("Department with name " + departmentRequestDto.getName() + " Already Exists");
-        Department department = modelMapper.map(departmentRequestDto, Department.class);
-        return departmentRepository.save(department);
-    }
-
-    public Department getDepartmentById(Long departmentId) {
-        return departmentRepository.findById(departmentId).orElseThrow(() -> new EntityNotFoundException("Department with Id " + departmentId + " not found"));
+    public void addDepartment(DepartmentEnum departmentEnum) {
+        if (!departmentRepository.existsByName(departmentEnum)) {
+            Department department = Department.builder().name(departmentEnum).build();
+            departmentRepository.save(department);
+        }
     }
 
     public GenericResponse<Department> getAllDepartments(int pageNumber, int pageSize) {
@@ -47,14 +36,5 @@ public class DepartmentService {
                 departmentsPage.getTotalElements(),
                 departmentsPage.getContent()
         );
-    }
-
-    public Department updateDepartment(Long departmentId, DepartmentRequestDto department) {
-        Department savedDepartment = departmentRepository.findById(departmentId).orElseThrow(() -> new EntityNotFoundException("Department with Id " + departmentId + " not found"));
-        Optional<Department> departmentOptional = departmentRepository.findByNameIgnoreCase(department.getName());
-        if (departmentOptional.isPresent())
-            throw new CustomException("Department with name " + department.getName() + " Already Exists");
-        savedDepartment.setName(department.getName());
-        return departmentRepository.save(savedDepartment);
     }
 }

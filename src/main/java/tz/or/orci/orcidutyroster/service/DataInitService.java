@@ -7,13 +7,16 @@ import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Role;
 import tz.or.orci.orcidutyroster.payload.request.DepartmentRequestDto;
 import tz.or.orci.orcidutyroster.payload.request.RegisterByAdminRequestDto;
-import tz.or.orci.orcidutyroster.repository.DepartmentRepository;
-import tz.or.orci.orcidutyroster.repository.RoleRepository;
-import tz.or.orci.orcidutyroster.repository.UserRepository;
+import tz.or.orci.orcidutyroster.payload.request.ShiftDto;
+import tz.or.orci.orcidutyroster.payload.request.WorkstationDto;
+import tz.or.orci.orcidutyroster.repository.*;
 
 import java.util.List;
 
+import static tz.or.orci.orcidutyroster.model.enums.DepartmentEnum.DEFAULT_DEPARTMENT;
 import static tz.or.orci.orcidutyroster.model.enums.RoleEnum.*;
+import static tz.or.orci.orcidutyroster.model.enums.ShiftEnum.DEFAULT_SHIFT;
+import static tz.or.orci.orcidutyroster.model.enums.WorkstationEnum.DEFAULT_WORKSTATION;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,10 @@ public class DataInitService {
     private final AuthService authService;
     private final DepartmentRepository departmentRepository;
     private final DepartmentService departmentService;
+    private final ShiftRepository shiftRepository;
+    private final ShiftService shiftService;
+    private final WorkstationRepository workstationRepository;
+    private final WorkstationService workstationService;
 
     public void addDefaultRoles() {
         if (!roleRepository.existsByName(ADMIN))
@@ -44,17 +51,6 @@ public class DataInitService {
             roleRepository.save(Role.builder().name(INTERN).description("Intern").build());
     }
 
-    public void addDefaultDepartments() {
-        if (!departmentRepository.existsByNameIgnoreCase("Default Department")) {
-            departmentService.addDepartment(
-                    DepartmentRequestDto
-                            .builder()
-                            .name("Default Department")
-                            .build()
-            );
-        }
-    }
-
     public void addDefaultUsers() {
         if (!userRepository.existsByUsernameIgnoreCase("james.bond")) {
             Department department = departmentRepository.findByNameIgnoreCase("Default Department").orElseThrow(() -> new EntityNotFoundException("Department with Name 'Default Department' not found"));
@@ -68,4 +64,21 @@ public class DataInitService {
             authService.registerByAdmin(jamesBondRequest);
         }
     }
+
+    public void addDefaultDepartments() {
+        if (!departmentRepository.existsByName(DEFAULT_DEPARTMENT)) {
+            departmentService.addDepartment(DepartmentRequestDto.builder().name("Default Department").build());
+        }
+    }
+
+    public void addDefaultShifts() {
+        if (!shiftRepository.existsByName(DEFAULT_SHIFT))
+            shiftService.addShift(ShiftDto.builder().name(DEFAULT_SHIFT).description("Default Shit").build());
+    }
+
+    public void addDefaultWorkstations() {
+        if (!workstationRepository.existsByName(DEFAULT_WORKSTATION))
+            workstationService.addWorkstation(WorkstationDto.builder().name(DEFAULT_WORKSTATION).description("Default Workstation").build());
+    }
+
 }

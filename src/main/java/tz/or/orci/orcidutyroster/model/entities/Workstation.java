@@ -2,6 +2,7 @@ package tz.or.orci.orcidutyroster.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
 
 @Builder
 @AllArgsConstructor
@@ -16,8 +17,9 @@ public class Workstation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private WorkstationEnum name;
 
-    @ManyToOne
+    @ManyToOne()
     private Department department;
 }

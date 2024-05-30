@@ -4,9 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tz.or.orci.orcidutyroster.model.entities.Designation;
 
 /**
- * DTO for {@link tz.or.orci.orcidutyroster.model.entities.UserCategory}
+ * DTO for {@link Designation}
  */
 @Data
 @Builder

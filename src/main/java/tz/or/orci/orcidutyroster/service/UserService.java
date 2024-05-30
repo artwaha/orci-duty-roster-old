@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Role;
 import tz.or.orci.orcidutyroster.model.entities.User;
-import tz.or.orci.orcidutyroster.model.entities.UserCategory;
+import tz.or.orci.orcidutyroster.model.entities.Designation;
 import tz.or.orci.orcidutyroster.model.enums.RoleEnum;
 import tz.or.orci.orcidutyroster.payload.request.UserUpdateRequestDto;
 import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
@@ -102,8 +102,8 @@ public class UserService {
         }
 
         if (userUpdateRequest.getUserCategoryId() != null) {
-            UserCategory userCategory = userCategoryRepository.findById(userUpdateRequest.getUserCategoryId()).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + userUpdateRequest.getUserCategoryId() + " not found"));
-            savedUser.setUserCategory(userCategory);
+            Designation designation = userCategoryRepository.findById(userUpdateRequest.getUserCategoryId()).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + userUpdateRequest.getUserCategoryId() + " not found"));
+            savedUser.setDesignation(designation);
         }
 
         if (userUpdateRequest.getRoles() != null) {

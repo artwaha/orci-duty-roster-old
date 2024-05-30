@@ -31,14 +31,6 @@ public interface ShiftController {
             @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
     );
 
-    @GetMapping("departments/{id}")
-    @Operation(summary = "Get Shifts by Department")
-    ResponseEntity<GenericResponse<Shift>> getAllShiftsByDepartment(
-            @PathVariable @Valid Long id,
-            @Valid @RequestParam(defaultValue = "0", required = false) int pageNumber,
-            @Valid @RequestParam(defaultValue = "10", required = false) int pageSize
-    );
-
     @PatchMapping("{id}")
     @Operation(summary = "Update Shift", description = "Admin Protected")
     @PreAuthorize("hasRole('ADMIN')")

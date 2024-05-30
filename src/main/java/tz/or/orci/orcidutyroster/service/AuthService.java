@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Role;
 import tz.or.orci.orcidutyroster.model.entities.User;
-import tz.or.orci.orcidutyroster.model.entities.UserCategory;
+import tz.or.orci.orcidutyroster.model.entities.Designation;
 import tz.or.orci.orcidutyroster.payload.request.LoginRequestDto;
 import tz.or.orci.orcidutyroster.payload.request.RegisterByAdminRequestDto;
 import tz.or.orci.orcidutyroster.payload.request.SelfRegisterRequestDto;
@@ -114,8 +114,8 @@ public class AuthService {
         newUser.setDepartment(department);
 
         if (registerRequest.getUserCategoryId() != null) {
-            UserCategory userCategory = userCategoryRepository.findById(registerRequest.getUserCategoryId()).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + registerRequest.getUserCategoryId() + " not found."));
-            newUser.setUserCategory(userCategory);
+            Designation designation = userCategoryRepository.findById(registerRequest.getUserCategoryId()).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + registerRequest.getUserCategoryId() + " not found."));
+            newUser.setDesignation(designation);
         }
 
         List<Role> userRoles = registerRequest

@@ -100,8 +100,8 @@ public class Utils {
     public UserDto userEntityToUserDto(User user) {
         UserDto userDto = modelMapper.map(user, UserDto.class);
         userDto.setRoles(user.getRoles());
-        if (user.getUserCategory() != null)
-            userDto.setUserCategory(user.getUserCategory());
+        if (user.getDesignation() != null)
+            userDto.setDesignation(user.getDesignation());
         if (user.getDepartment() != null)
             userDto.setDepartment(user.getDepartment());
         return userDto;

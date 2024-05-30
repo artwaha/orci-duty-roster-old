@@ -21,5 +21,7 @@ public class OrciDutyRosterApplication implements ApplicationRunner {
         dataInitService.addDefaultRoles();
         dataInitService.addDefaultDepartments();
         dataInitService.addDefaultUsers();
+        dataInitService.addDefaultShifts();
+        dataInitService.addDefaultWorkstations();
     }
 }

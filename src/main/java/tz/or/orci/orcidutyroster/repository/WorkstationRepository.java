@@ -5,11 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Workstation;
+import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
 
 import java.util.Optional;
 
 public interface WorkstationRepository extends JpaRepository<Workstation, Long> {
-    Optional<Workstation> findByNameIgnoreCase(String name);
+    Optional<Workstation> findByName(WorkstationEnum name);
 
-    Page<Workstation> findByDepartment(Department department, Pageable pageable);
+    boolean existsByName(WorkstationEnum name);
 }

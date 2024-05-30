@@ -8,5 +8,5 @@ spring:
     password: Fsa01b2020
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     show-sql: false

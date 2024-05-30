@@ -2,7 +2,7 @@ package tz.or.orci.orcidutyroster.model.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
-import tz.or.orci.orcidutyroster.model.auditable.AuditableWithUser;
+import tz.or.orci.orcidutyroster.model.enums.ShiftEnum;
 
 @Builder
 @AllArgsConstructor
@@ -12,15 +12,15 @@ import tz.or.orci.orcidutyroster.model.auditable.AuditableWithUser;
 
 @Entity
 @Table(name = "shifts")
-public class Shift extends AuditableWithUser {
+public class Shift {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private ShiftEnum name;
 
     private String description;
 
-    @ManyToOne
-    private Department department;
+    private boolean claimable;
 }
