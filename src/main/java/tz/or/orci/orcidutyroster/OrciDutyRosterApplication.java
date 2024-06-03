@@ -20,8 +20,15 @@ public class OrciDutyRosterApplication implements ApplicationRunner {
     public void run(ApplicationArguments args) throws Exception {
         dataInitService.addDefaultRoles();
         dataInitService.addDefaultDepartments();
-        dataInitService.addDefaultUsers();
+
+        dataInitService.addDefaultUserDesignations();
         dataInitService.addDefaultShifts();
         dataInitService.addDefaultWorkstations();
+
+
+        dataInitService.assignShiftsToDepartment();
+        dataInitService.assignUserDesignationsToDepartment();
+
+        dataInitService.addDefaultUsers();
     }
 }

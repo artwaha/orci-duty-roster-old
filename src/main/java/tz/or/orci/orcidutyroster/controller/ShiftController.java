@@ -13,17 +13,7 @@ import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
 
 @RequestMapping("api/v1/shifts")
 @Tag(name = "Shift Controller")
-@SecurityRequirement(name = "jwt")
 public interface ShiftController {
-    @PostMapping()
-    @Operation(summary = "Add Shift", description = "Admin Protected")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<Shift> addShift(@Valid @RequestBody ShiftDto shiftDto);
-
-    @GetMapping("{id}")
-    @Operation(summary = "Get Shift by Id")
-    ResponseEntity<Shift> getShiftById(@PathVariable @Valid Long id);
-
     @GetMapping()
     @Operation(summary = "Get All Shifts")
     ResponseEntity<GenericResponse<Shift>> getAllShifts(
@@ -33,6 +23,7 @@ public interface ShiftController {
 
     @PatchMapping("{id}")
     @Operation(summary = "Update Shift", description = "Admin Protected")
+    @SecurityRequirement(name = "jwt")
     @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<Shift> updateShift(
             @Valid @PathVariable Long id,

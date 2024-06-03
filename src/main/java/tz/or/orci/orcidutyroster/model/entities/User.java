@@ -31,8 +31,7 @@ public class User extends AuditableWithUser implements UserDetails {
     private String fullName;
 
     @ManyToOne
-    @JoinColumn
-    private Designation designation;
+    private UserDesignation userDesignation;
 
     @Column(nullable = false)
     private boolean active = false;

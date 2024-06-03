@@ -45,12 +45,12 @@ public class SecurityConfig {
                                     "/api/v1/auth/login",
                                     "/api/v1/auth/self-register",
                                     "/api/v1/departments",
-                                    "api/v1/roles"
+                                    "api/v1/roles",
+                                    "api/v1/user-designations",
+                                    "api/v1/work-stations",
+                                    "api/v1/shifts"
                             )
                             .permitAll();
-                    requests
-                            .requestMatchers("/api/v1/user-categories/**")
-                            .hasRole("ADMIN");
                     requests
                             .anyRequest()
                             .authenticated();

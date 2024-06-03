@@ -1,9 +1,9 @@
 package tz.or.orci.orcidutyroster.payload.response;
 
 import lombok.Data;
-import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Role;
-import tz.or.orci.orcidutyroster.model.entities.Designation;
+import tz.or.orci.orcidutyroster.model.entities.UserDesignation;
+import tz.or.orci.orcidutyroster.model.entities.Workstation;
 
 import java.util.List;
 
@@ -16,7 +16,8 @@ public class UserDto {
     private String username;
     private String fullName;
     private boolean active;
-    private Designation designation;
-    private Department department;
+    private UserDesignation userDesignation;
+    private DepartmentDto department;
     private List<Role> roles;
+    private List<Workstation> workstations;
 }

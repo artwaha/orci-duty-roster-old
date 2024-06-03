@@ -20,7 +20,5 @@ public class Shift {
     @Enumerated(EnumType.STRING)
     private ShiftEnum name;
 
-    private String description;
-
-    private boolean claimable;
+    private boolean claimable = true;
 }

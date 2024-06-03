@@ -1,15 +1,19 @@
 package tz.or.orci.orcidutyroster.payload.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import tz.or.orci.orcidutyroster.model.enums.ShiftEnum;
+import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+import java.util.List;
+
+/**
+ * DTO for {@link tz.or.orci.orcidutyroster.model.entities.Department}
+ */
+@Getter
+@Setter
 public class DepartmentRequestDto {
-    //    @NotBlank(message = "Department name is required")
-    String name;
+    private List<Long> userDesignationIDs;
+    private List<ShiftEnum> shiftNames;
+    private List<WorkstationEnum> workstationNames;
 }

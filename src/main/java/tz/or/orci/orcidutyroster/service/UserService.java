@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import tz.or.orci.orcidutyroster.model.entities.Department;
 import tz.or.orci.orcidutyroster.model.entities.Role;
 import tz.or.orci.orcidutyroster.model.entities.User;
-import tz.or.orci.orcidutyroster.model.entities.Designation;
+import tz.or.orci.orcidutyroster.model.entities.UserDesignation;
 import tz.or.orci.orcidutyroster.model.enums.RoleEnum;
 import tz.or.orci.orcidutyroster.payload.request.UserUpdateRequestDto;
 import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
@@ -17,7 +17,7 @@ import tz.or.orci.orcidutyroster.payload.response.UserDto;
 import tz.or.orci.orcidutyroster.payload.response.ValidationResult;
 import tz.or.orci.orcidutyroster.repository.DepartmentRepository;
 import tz.or.orci.orcidutyroster.repository.RoleRepository;
-import tz.or.orci.orcidutyroster.repository.UserCategoryRepository;
+import tz.or.orci.orcidutyroster.repository.UserDesignationRepository;
 import tz.or.orci.orcidutyroster.repository.UserRepository;
 import tz.or.orci.orcidutyroster.security.CustomException;
 
@@ -32,7 +32,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final Utils utils;
     private final DepartmentRepository departmentRepository;
-    private final UserCategoryRepository userCategoryRepository;
+    private final UserDesignationRepository userDesignationRepository;
     private final RoleRepository roleRepository;
 
     public UserDto getUserById(Long userId) {
@@ -102,8 +102,8 @@ public class UserService {
         }
 
         if (userUpdateRequest.getUserCategoryId() != null) {
-            Designation designation = userCategoryRepository.findById(userUpdateRequest.getUserCategoryId()).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + userUpdateRequest.getUserCategoryId() + " not found"));
-            savedUser.setDesignation(designation);
+            UserDesignation userDesignation = userDesignationRepository.findById(userUpdateRequest.getUserCategoryId()).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + userUpdateRequest.getUserCategoryId() + " not found"));
+            savedUser.setUserDesignation(userDesignation);
         }
 
         if (userUpdateRequest.getRoles() != null) {

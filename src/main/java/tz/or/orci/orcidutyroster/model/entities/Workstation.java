@@ -1,5 +1,6 @@
 package tz.or.orci.orcidutyroster.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
@@ -20,6 +21,7 @@ public class Workstation {
     @Enumerated(EnumType.STRING)
     private WorkstationEnum name;
 
+    @JsonBackReference
     @ManyToOne()
     private Department department;
 }

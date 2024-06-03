@@ -1,15 +1,10 @@
 package tz.or.orci.orcidutyroster.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tz.or.orci.orcidutyroster.model.entities.Department;
-import tz.or.orci.orcidutyroster.model.entities.Role;
-import tz.or.orci.orcidutyroster.payload.request.DepartmentRequestDto;
 import tz.or.orci.orcidutyroster.payload.request.RegisterByAdminRequestDto;
-import tz.or.orci.orcidutyroster.payload.request.ShiftDto;
-import tz.or.orci.orcidutyroster.payload.request.WorkstationDto;
-import tz.or.orci.orcidutyroster.repository.*;
+import tz.or.orci.orcidutyroster.payload.request.UserDesignationDto;
+import tz.or.orci.orcidutyroster.repository.UserRepository;
 
 import java.util.List;
 
@@ -21,64 +16,59 @@ import static tz.or.orci.orcidutyroster.model.enums.WorkstationEnum.DEFAULT_WORK
 @Service
 @RequiredArgsConstructor
 public class DataInitService {
-    private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final AuthService authService;
-    private final DepartmentRepository departmentRepository;
     private final DepartmentService departmentService;
-    private final ShiftRepository shiftRepository;
     private final ShiftService shiftService;
-    private final WorkstationRepository workstationRepository;
     private final WorkstationService workstationService;
+    private final RoleService roleService;
+    private final UserDesignationService userDesignationService;
 
     public void addDefaultRoles() {
-        if (!roleRepository.existsByName(ADMIN))
-            roleRepository.save(Role.builder().name(ADMIN).description("Admin").build());
-
-        if (!roleRepository.existsByName(HEAD_OF_DEPARTMENT))
-            roleRepository.save(Role.builder().name(HEAD_OF_DEPARTMENT).description("Head of Department").build());
-
-        if (!roleRepository.existsByName(SUPERVISOR))
-            roleRepository.save(Role.builder().name(SUPERVISOR).description("Supervisor").build());
-
-        if (!roleRepository.existsByName(STAFF))
-            roleRepository.save(Role.builder().name(STAFF).description("Staff").build());
-
-        if (!roleRepository.existsByName(VOLUNTEER))
-            roleRepository.save(Role.builder().name(VOLUNTEER).description("Volunteer").build());
-
-        if (!roleRepository.existsByName(INTERN))
-            roleRepository.save(Role.builder().name(INTERN).description("Intern").build());
+        roleService.addRole(ADMIN);
+        roleService.addRole(HEAD_OF_DEPARTMENT);
+        roleService.addRole(SUPERVISOR);
+        roleService.addRole(STAFF);
+        roleService.addRole(VOLUNTEER);
+        roleService.addRole(INTERN);
     }
 
     public void addDefaultUsers() {
         if (!userRepository.existsByUsernameIgnoreCase("james.bond")) {
-            Department department = departmentRepository.findByNameIgnoreCase("Default Department").orElseThrow(() -> new EntityNotFoundException("Department with Name 'Default Department' not found"));
             RegisterByAdminRequestDto jamesBondRequest = RegisterByAdminRequestDto
                     .builder()
                     .username("James.bond")
                     .fullName("James Bond")
-                    .departmentId(department.getId())
+                    .departmentName(DEFAULT_DEPARTMENT)
                     .roles(List.of(STAFF, ADMIN))
+                    .workstationNames(List.of(DEFAULT_WORKSTATION))
+                    .userDesignationId(1L)
                     .build();
             authService.registerByAdmin(jamesBondRequest);
         }
     }
 
     public void addDefaultDepartments() {
-        if (!departmentRepository.existsByName(DEFAULT_DEPARTMENT)) {
-            departmentService.addDepartment(DepartmentRequestDto.builder().name("Default Department").build());
-        }
+        departmentService.addDepartment(DEFAULT_DEPARTMENT);
     }
 
-    public void addDefaultShifts() {
-        if (!shiftRepository.existsByName(DEFAULT_SHIFT))
-            shiftService.addShift(ShiftDto.builder().name(DEFAULT_SHIFT).description("Default Shit").build());
+    public void assignShiftsToDepartment() {
+        departmentService.assignShifts(DEFAULT_DEPARTMENT, List.of(DEFAULT_SHIFT));
+    }
+
+    public void assignUserDesignationsToDepartment() {
+        departmentService.assignUserDesignations(DEFAULT_DEPARTMENT, List.of(1L));
     }
 
     public void addDefaultWorkstations() {
-        if (!workstationRepository.existsByName(DEFAULT_WORKSTATION))
-            workstationService.addWorkstation(WorkstationDto.builder().name(DEFAULT_WORKSTATION).description("Default Workstation").build());
+        workstationService.addWorkstation(DEFAULT_WORKSTATION, DEFAULT_DEPARTMENT);
     }
 
+    public void addDefaultShifts() {
+        shiftService.addShift(DEFAULT_SHIFT);
+    }
+
+    public void addDefaultUserDesignations() {
+        userDesignationService.addUserDesignation(UserDesignationDto.builder().name("Default User Designation").build());
+    }
 }

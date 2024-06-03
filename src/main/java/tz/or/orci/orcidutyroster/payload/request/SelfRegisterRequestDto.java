@@ -1,12 +1,17 @@
 package tz.or.orci.orcidutyroster.payload.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tz.or.orci.orcidutyroster.model.enums.DepartmentEnum;
 import tz.or.orci.orcidutyroster.model.enums.RoleEnum;
+import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
+
+import java.util.List;
 
 @Data
 @Builder
@@ -20,8 +25,11 @@ public class SelfRegisterRequestDto {
     private String fullName;
 
     @NotNull(message = "Role is Required")
-    private RoleEnum role;
+    private RoleEnum roleName;
 
     @NotNull(message = "Department is Required")
-    private Long departmentId;
+    private DepartmentEnum departmentName;
+
+    @NotEmpty(message = "Workstation is Required")
+    private List<WorkstationEnum> workstationNames;
 }

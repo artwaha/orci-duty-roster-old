@@ -9,20 +9,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
 import org.springframework.stereotype.Service;
-import tz.or.orci.orcidutyroster.model.entities.Department;
-import tz.or.orci.orcidutyroster.model.entities.Role;
-import tz.or.orci.orcidutyroster.model.entities.User;
-import tz.or.orci.orcidutyroster.model.entities.Designation;
+import tz.or.orci.orcidutyroster.model.entities.*;
 import tz.or.orci.orcidutyroster.payload.request.LoginRequestDto;
 import tz.or.orci.orcidutyroster.payload.request.RegisterByAdminRequestDto;
 import tz.or.orci.orcidutyroster.payload.request.SelfRegisterRequestDto;
 import tz.or.orci.orcidutyroster.payload.response.AuthResponseDto;
 import tz.or.orci.orcidutyroster.payload.response.UserDto;
 import tz.or.orci.orcidutyroster.payload.response.ValidationResult;
-import tz.or.orci.orcidutyroster.repository.DepartmentRepository;
-import tz.or.orci.orcidutyroster.repository.RoleRepository;
-import tz.or.orci.orcidutyroster.repository.UserCategoryRepository;
-import tz.or.orci.orcidutyroster.repository.UserRepository;
+import tz.or.orci.orcidutyroster.repository.*;
 import tz.or.orci.orcidutyroster.security.CustomException;
 import tz.or.orci.orcidutyroster.security.JwtService;
 
@@ -37,8 +31,9 @@ public class AuthService {
     private final Utils utils;
     private final ModelMapper modelMapper;
     private final RoleRepository roleRepository;
-    private final UserCategoryRepository userCategoryRepository;
+    private final UserDesignationRepository userDesignationRepository;
     private final DepartmentRepository departmentRepository;
+    private final WorkstationRepository workstationRepository;
 
     public AuthResponseDto login(LoginRequestDto loginRequest) {
         User user = userRepository.findByUsernameIgnoreCase(loginRequest.getUsername()).orElseThrow(() -> new UsernameNotFoundException("User not found"));
@@ -62,28 +57,33 @@ public class AuthService {
     }
 
     public UserDto selfRegister(SelfRegisterRequestDto registerRequest) {
-        boolean usernameIsValid = utils.userExistsInActiveDirectory(registerRequest.getUsername());
 
-        if (!usernameIsValid)
+        if (!utils.userExistsInActiveDirectory(registerRequest.getUsername()))
             throw new EntityNotFoundException("Username " + registerRequest.getUsername() + " not found in Domain.");
 
-        boolean userExists = userRepository.existsByUsernameIgnoreCase(registerRequest.getUsername());
-
-        if (userExists)
+        if (userRepository.existsByUsernameIgnoreCase(registerRequest.getUsername()))
             throw new CustomException("User with username " + registerRequest.getUsername() + " already exists");
 
-        ValidationResult roleValidationResult = utils.validateRole(registerRequest.getRole());
+        ValidationResult roleValidationResult = utils.validateRole(registerRequest.getRoleName());
         if (!roleValidationResult.isValid()) {
             throw new CustomException(roleValidationResult.getMessage());
         }
 
         User newUser = modelMapper.map(registerRequest, User.class);
 
-        Role userRole = roleRepository.findByName(registerRequest.getRole());
+        Role userRole = roleRepository.findByName(registerRequest.getRoleName());
         newUser.setRoles(List.of(userRole));
 
-        Department department = departmentRepository.findById(registerRequest.getDepartmentId()).orElseThrow(() -> new EntityNotFoundException("Department with Id " + registerRequest.getDepartmentId() + " not found"));
+        Department department = departmentRepository.findByName(registerRequest.getDepartmentName());
         newUser.setDepartment(department);
+
+        ValidationResult validateWorkstationResult = utils.validateWorkstations(registerRequest.getRoleName(), registerRequest.getWorkstationNames());
+        if (!validateWorkstationResult.isValid()) {
+            throw new CustomException(roleValidationResult.getMessage());
+        }
+
+        List<Workstation> workstationList = registerRequest.getWorkstationNames().stream().map(workstationRepository::findByName).toList();
+        newUser.setWorkstations(workstationList);
 
         User savedUser = userRepository.save(newUser);
 
@@ -105,17 +105,24 @@ public class AuthService {
         if (!roleValidationResult.isValid())
             throw new CustomException(roleValidationResult.getMessage());
 
-
         User newUser = modelMapper.map(registerRequest, User.class);
 
         newUser.setActive(true);
 
-        Department department = departmentRepository.findById(registerRequest.getDepartmentId()).orElseThrow(() -> new EntityNotFoundException("Department with Id " + registerRequest.getDepartmentId() + " not found"));
+        Department department = departmentRepository.findByName(registerRequest.getDepartmentName());
         newUser.setDepartment(department);
 
-        if (registerRequest.getUserCategoryId() != null) {
-            Designation designation = userCategoryRepository.findById(registerRequest.getUserCategoryId()).orElseThrow(() -> new EntityNotFoundException("User Category with Id " + registerRequest.getUserCategoryId() + " not found."));
-            newUser.setDesignation(designation);
+        ValidationResult validateWorkstationResult = utils.validateWorkstations(utils.extractUserRoleOtherThanAdmin(registerRequest.getRoles()).orElseThrow(), registerRequest.getWorkstationNames());
+        if (!validateWorkstationResult.isValid()) {
+            throw new CustomException(roleValidationResult.getMessage());
+        }
+
+        List<Workstation> workstationList = registerRequest.getWorkstationNames().stream().map(workstationRepository::findByName).toList();
+        newUser.setWorkstations(workstationList);
+
+        if (registerRequest.getUserDesignationId() != null) {
+            UserDesignation userDesignation = userDesignationRepository.findById(registerRequest.getUserDesignationId()).orElseThrow(() -> new EntityNotFoundException("User Designation with Id " + registerRequest.getUserDesignationId() + " not found."));
+            newUser.setUserDesignation(userDesignation);
         }
 
         List<Role> userRoles = registerRequest

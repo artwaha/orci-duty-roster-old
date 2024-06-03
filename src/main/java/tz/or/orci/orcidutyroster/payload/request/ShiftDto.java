@@ -1,10 +1,11 @@
 package tz.or.orci.orcidutyroster.payload.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tz.or.orci.orcidutyroster.model.enums.ShiftEnum;
 
 /**
  * DTO for {@link tz.or.orci.orcidutyroster.model.entities.Shift}
@@ -14,7 +15,6 @@ import tz.or.orci.orcidutyroster.model.enums.ShiftEnum;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ShiftDto {
-    private ShiftEnum name;
-    private String description;
-    private String information;
+    @NotNull
+    private Boolean claimable;
 }

@@ -1,5 +1,6 @@
 package tz.or.orci.orcidutyroster.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import tz.or.orci.orcidutyroster.model.enums.DepartmentEnum;
@@ -24,11 +25,12 @@ public class Department {
     private DepartmentEnum name;
 
     @ManyToMany
-    private List<Designation> designations = new ArrayList<>();
+    private List<UserDesignation> userDesignations = new ArrayList<>();
 
     @ManyToMany
     private List<Shift> shifts = new ArrayList<>();
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Workstation> workstations = new ArrayList<>();
 

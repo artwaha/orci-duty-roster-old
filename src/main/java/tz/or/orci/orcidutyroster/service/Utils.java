@@ -7,20 +7,16 @@ import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import tz.or.orci.orcidutyroster.model.entities.Roster;
-import tz.or.orci.orcidutyroster.model.entities.RosterTracking;
-import tz.or.orci.orcidutyroster.model.entities.Token;
-import tz.or.orci.orcidutyroster.model.entities.User;
+import tz.or.orci.orcidutyroster.model.entities.*;
 import tz.or.orci.orcidutyroster.model.enums.RoleEnum;
-import tz.or.orci.orcidutyroster.payload.response.ErrorResponseDto;
-import tz.or.orci.orcidutyroster.payload.response.GenericResponse;
-import tz.or.orci.orcidutyroster.payload.response.UserDto;
-import tz.or.orci.orcidutyroster.payload.response.ValidationResult;
+import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
+import tz.or.orci.orcidutyroster.payload.response.*;
 import tz.or.orci.orcidutyroster.repository.RosterTrackingRepository;
 import tz.or.orci.orcidutyroster.repository.TokenRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static tz.or.orci.orcidutyroster.model.enums.RoleEnum.*;
 
@@ -45,9 +41,21 @@ public class Utils {
         return !searchResult.isEmpty();
     }
 
+    public Optional<RoleEnum> extractUserRoleOtherThanAdmin(List<RoleEnum> userRoles) {
+        return userRoles
+                .stream()
+                .filter(role -> role != ADMIN)
+                .findFirst();
+    }
+
+
     public void saveUserToken(String token, User user) {
         Token newToken = Token.builder().token(token).revoked(false).user(user).build();
         tokenRepository.save(newToken);
+    }
+
+    public DepartmentDto departmentEntityToDepartmentDTO(Department department) {
+        return modelMapper.map(department, DepartmentDto.class);
     }
 
     public void revokeAllUserTokens(User user) {
@@ -100,10 +108,10 @@ public class Utils {
     public UserDto userEntityToUserDto(User user) {
         UserDto userDto = modelMapper.map(user, UserDto.class);
         userDto.setRoles(user.getRoles());
-        if (user.getDesignation() != null)
-            userDto.setDesignation(user.getDesignation());
+        if (user.getUserDesignation() != null)
+            userDto.setUserDesignation(user.getUserDesignation());
         if (user.getDepartment() != null)
-            userDto.setDepartment(user.getDepartment());
+            userDto.setDepartment(departmentEntityToDepartmentDTO(user.getDepartment()));
         return userDto;
     }
 
@@ -166,6 +174,17 @@ public class Utils {
             validationResult.setValid(true);
         }
 
+        return validationResult;
+    }
+
+    public ValidationResult validateWorkstations(RoleEnum roleName, List<WorkstationEnum> workstationNames) {
+        ValidationResult validationResult = new ValidationResult();
+        if (roleName != SUPERVISOR && workstationNames.size() > 1) {
+            validationResult.setValid(false);
+            validationResult.setMessage("Only Supervisors are eligible to multiple Workstation references");
+        } else {
+            validationResult.setValid(true);
+        }
         return validationResult;
     }
 }

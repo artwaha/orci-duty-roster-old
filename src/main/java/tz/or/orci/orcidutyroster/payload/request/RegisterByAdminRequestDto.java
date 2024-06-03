@@ -7,7 +7,9 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import tz.or.orci.orcidutyroster.model.enums.DepartmentEnum;
 import tz.or.orci.orcidutyroster.model.enums.RoleEnum;
+import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
 
 import java.util.List;
 
@@ -26,7 +28,10 @@ public class RegisterByAdminRequestDto {
     private List<RoleEnum> roles;
 
     @NotNull(message = "Department is Required")
-    private Long departmentId;
+    private DepartmentEnum departmentName;
 
-    private Long userCategoryId;
+    private Long userDesignationId;
+
+    @NotEmpty(message = "Workstation is Required")
+    private List<WorkstationEnum> workstationNames;
 }

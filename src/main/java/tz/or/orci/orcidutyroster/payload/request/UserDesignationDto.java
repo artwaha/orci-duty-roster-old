@@ -4,16 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import tz.or.orci.orcidutyroster.model.entities.Designation;
+import tz.or.orci.orcidutyroster.model.entities.UserDesignation;
 
 /**
- * DTO for {@link Designation}
+ * DTO for {@link UserDesignation}
  */
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserCategoryDto {
+public class UserDesignationDto {
     private String name;
-    private Long departmentId;
 }
