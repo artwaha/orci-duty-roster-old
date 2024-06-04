@@ -15,7 +15,7 @@ import tz.or.orci.orcidutyroster.service.Utils;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestControllerAdvice
+//@RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
     private final HttpServletRequest request;

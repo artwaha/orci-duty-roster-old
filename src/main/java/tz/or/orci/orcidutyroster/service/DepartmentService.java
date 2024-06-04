@@ -71,11 +71,11 @@ public class DepartmentService {
             savedDepartment.getUserDesignations().addAll(userDesignationList);
         }
 
-        if (departmentRequestDto.getWorkstationNames() != null) {
-            List<Workstation> workstationList = departmentRequestDto.getWorkstationNames().stream().map(workstationRepository::findByName).toList();
-            savedDepartment.getWorkstations().clear();
-            savedDepartment.getWorkstations().addAll(workstationList);
-        }
+//        if (departmentRequestDto.getWorkstationNames() != null) {
+//            List<Workstation> workstationList = departmentRequestDto.getWorkstationNames().stream().map(workstationRepository::findByName).toList();
+//            savedDepartment.getWorkstations().clear();
+//            savedDepartment.getWorkstations().addAll(workstationList);
+//        }
 
         if (departmentRequestDto.getShiftNames() != null) {
             List<Shift> shiftList = departmentRequestDto.getShiftNames().stream().map(shiftRepository::findByName).toList();

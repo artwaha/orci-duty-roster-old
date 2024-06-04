@@ -15,5 +15,5 @@ import java.util.List;
 public class DepartmentRequestDto {
     private List<Long> userDesignationIDs;
     private List<ShiftEnum> shiftNames;
-    private List<WorkstationEnum> workstationNames;
+//    private List<WorkstationEnum> workstationNames;
 }

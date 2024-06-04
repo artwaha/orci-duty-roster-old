@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import tz.or.orci.orcidutyroster.payload.request.RegisterByAdminRequestDto;
 import tz.or.orci.orcidutyroster.payload.request.UserDesignationDto;
+import tz.or.orci.orcidutyroster.repository.UserDesignationRepository;
 import tz.or.orci.orcidutyroster.repository.UserRepository;
 
 import java.util.List;
 
 import static tz.or.orci.orcidutyroster.model.enums.DepartmentEnum.DEFAULT_DEPARTMENT;
+import static tz.or.orci.orcidutyroster.model.enums.DepartmentEnum.DEFAULT_DEPARTMENT2;
 import static tz.or.orci.orcidutyroster.model.enums.RoleEnum.*;
 import static tz.or.orci.orcidutyroster.model.enums.ShiftEnum.DEFAULT_SHIFT;
 import static tz.or.orci.orcidutyroster.model.enums.WorkstationEnum.DEFAULT_WORKSTATION;
@@ -23,6 +25,7 @@ public class DataInitService {
     private final WorkstationService workstationService;
     private final RoleService roleService;
     private final UserDesignationService userDesignationService;
+    private final UserDesignationRepository userDesignationRepository;
 
     public void addDefaultRoles() {
         roleService.addRole(ADMIN);
@@ -50,6 +53,7 @@ public class DataInitService {
 
     public void addDefaultDepartments() {
         departmentService.addDepartment(DEFAULT_DEPARTMENT);
+        departmentService.addDepartment(DEFAULT_DEPARTMENT2);
     }
 
     public void assignShiftsToDepartment() {
@@ -69,6 +73,8 @@ public class DataInitService {
     }
 
     public void addDefaultUserDesignations() {
-        userDesignationService.addUserDesignation(UserDesignationDto.builder().name("Default User Designation").build());
+        if (!userDesignationRepository.existsByName("Default User Designation")) {
+            userDesignationService.addUserDesignation(UserDesignationDto.builder().name("Default User Designation").build());
+        }
     }
 }

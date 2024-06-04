@@ -31,7 +31,7 @@ public class Department {
     private List<Shift> shifts = new ArrayList<>();
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "department", cascade = CascadeType.ALL)
     private List<Workstation> workstations = new ArrayList<>();
 
 }
