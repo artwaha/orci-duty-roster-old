@@ -18,17 +18,17 @@ public class OrciDutyRosterApplication implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        dataInitService.addDefaultRoles();
-        dataInitService.addDefaultDepartments();
-
-        dataInitService.addDefaultUserDesignations();
-        dataInitService.addDefaultShifts();
-        dataInitService.addDefaultWorkstations();
-
-
-        dataInitService.assignShiftsToDepartment();
-        dataInitService.assignUserDesignationsToDepartment();
-
-        dataInitService.addDefaultUsers();
+//        dataInitService.addDefaultRoles();
+//        dataInitService.addDefaultDepartments();
+//
+//        dataInitService.addDefaultUserDesignations();
+//        dataInitService.addDefaultShifts();
+//        dataInitService.addDefaultWorkstations();
+//
+//
+//        dataInitService.assignShiftsToDepartment();
+//        dataInitService.assignUserDesignationsToDepartment();
+//
+//        dataInitService.addDefaultUsers();
     }
 }

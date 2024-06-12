@@ -2,18 +2,8 @@ package tz.or.orci.orcidutyroster.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import tz.or.orci.orcidutyroster.payload.request.RegisterByAdminRequestDto;
-import tz.or.orci.orcidutyroster.payload.request.UserDesignationDto;
 import tz.or.orci.orcidutyroster.repository.UserDesignationRepository;
 import tz.or.orci.orcidutyroster.repository.UserRepository;
-
-import java.util.List;
-
-import static tz.or.orci.orcidutyroster.model.enums.DepartmentEnum.DEFAULT_DEPARTMENT;
-import static tz.or.orci.orcidutyroster.model.enums.DepartmentEnum.DEFAULT_DEPARTMENT2;
-import static tz.or.orci.orcidutyroster.model.enums.RoleEnum.*;
-import static tz.or.orci.orcidutyroster.model.enums.ShiftEnum.DEFAULT_SHIFT;
-import static tz.or.orci.orcidutyroster.model.enums.WorkstationEnum.DEFAULT_WORKSTATION;
 
 @Service
 @RequiredArgsConstructor
@@ -27,54 +17,54 @@ public class DataInitService {
     private final UserDesignationService userDesignationService;
     private final UserDesignationRepository userDesignationRepository;
 
-    public void addDefaultRoles() {
-        roleService.addRole(ADMIN);
-        roleService.addRole(HEAD_OF_DEPARTMENT);
-        roleService.addRole(SUPERVISOR);
-        roleService.addRole(STAFF);
-        roleService.addRole(VOLUNTEER);
-        roleService.addRole(INTERN);
-    }
-
-    public void addDefaultUsers() {
-        if (!userRepository.existsByUsernameIgnoreCase("james.bond")) {
-            RegisterByAdminRequestDto jamesBondRequest = RegisterByAdminRequestDto
-                    .builder()
-                    .username("James.bond")
-                    .fullName("James Bond")
-                    .departmentName(DEFAULT_DEPARTMENT)
-                    .roles(List.of(STAFF, ADMIN))
-                    .workstationNames(List.of(DEFAULT_WORKSTATION))
-                    .userDesignationId(1L)
-                    .build();
-            authService.registerByAdmin(jamesBondRequest);
-        }
-    }
-
-    public void addDefaultDepartments() {
-        departmentService.addDepartment(DEFAULT_DEPARTMENT);
-        departmentService.addDepartment(DEFAULT_DEPARTMENT2);
-    }
-
-    public void assignShiftsToDepartment() {
-        departmentService.assignShifts(DEFAULT_DEPARTMENT, List.of(DEFAULT_SHIFT));
-    }
-
-    public void assignUserDesignationsToDepartment() {
-        departmentService.assignUserDesignations(DEFAULT_DEPARTMENT, List.of(1L));
-    }
-
-    public void addDefaultWorkstations() {
-        workstationService.addWorkstation(DEFAULT_WORKSTATION, DEFAULT_DEPARTMENT);
-    }
-
-    public void addDefaultShifts() {
-        shiftService.addShift(DEFAULT_SHIFT);
-    }
-
-    public void addDefaultUserDesignations() {
-        if (!userDesignationRepository.existsByName("Default User Designation")) {
-            userDesignationService.addUserDesignation(UserDesignationDto.builder().name("Default User Designation").build());
-        }
-    }
+//    public void addDefaultRoles() {
+//        roleService.addRole(ADMIN);
+//        roleService.addRole(HEAD_OF_DEPARTMENT);
+//        roleService.addRole(SUPERVISOR);
+//        roleService.addRole(STAFF);
+//        roleService.addRole(VOLUNTEER);
+//        roleService.addRole(INTERN);
+//    }
+//
+//    public void addDefaultUsers() {
+//        if (!userRepository.existsByUsernameIgnoreCase("james.bond")) {
+//            RegisterByAdminRequestDto jamesBondRequest = RegisterByAdminRequestDto
+//                    .builder()
+//                    .username("James.bond")
+//                    .fullName("James Bond")
+//                    .departmentName(DEFAULT_DEPARTMENT)
+//                    .roles(List.of(STAFF, ADMIN))
+//                    .workstationNames(List.of(DEFAULT_WORKSTATION))
+//                    .userDesignationId(1L)
+//                    .build();
+//            authService.registerByAdmin(jamesBondRequest);
+//        }
+//    }
+//
+//    public void addDefaultDepartments() {
+////        departmentService.addDepartment(DEFAULT_DEPARTMENT);
+////        departmentService.addDepartment(DEFAULT_DEPARTMENT2);
+//    }
+//
+//    public void assignShiftsToDepartment() {
+//        departmentService.assignShifts(DEFAULT_DEPARTMENT, List.of(DEFAULT_SHIFT));
+//    }
+//
+//    public void assignUserDesignationsToDepartment() {
+//        departmentService.assignUserDesignations(DEFAULT_DEPARTMENT, List.of(1L));
+//    }
+//
+//    public void addDefaultWorkstations() {
+//        workstationService.addWorkstation(DEFAULT_WORKSTATION, DEFAULT_DEPARTMENT);
+//    }
+//
+//    public void addDefaultShifts() {
+//        shiftService.addShift(DEFAULT_SHIFT);
+//    }
+//
+//    public void addDefaultUserDesignations() {
+//        if (!userDesignationRepository.existsByName("Default User Designation")) {
+//            userDesignationService.addUserDesignation(UserDesignationDto.builder().name("Default User Designation").build());
+//        }
+//    }
 }

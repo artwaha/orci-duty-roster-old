@@ -3,7 +3,6 @@ package tz.or.orci.orcidutyroster.model.entities;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import tz.or.orci.orcidutyroster.model.enums.DepartmentEnum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +20,10 @@ public class Department {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Enumerated(EnumType.STRING)
-    private DepartmentEnum name;
+    private String name;
+
+//    @Enumerated(EnumType.STRING)
+//    private DepartmentEnum name;
 
     @ManyToMany
     private List<UserDesignation> userDesignations = new ArrayList<>();

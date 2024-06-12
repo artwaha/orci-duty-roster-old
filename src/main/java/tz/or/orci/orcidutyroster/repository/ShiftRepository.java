@@ -5,7 +5,7 @@ import tz.or.orci.orcidutyroster.model.entities.Shift;
 import tz.or.orci.orcidutyroster.model.enums.ShiftEnum;
 
 public interface ShiftRepository extends JpaRepository<Shift, Long> {
-    Shift findByName(ShiftEnum name);
+    Shift findByName(String name);
 
-    boolean existsByName(ShiftEnum name);
+    boolean existsByName(String name);
 }

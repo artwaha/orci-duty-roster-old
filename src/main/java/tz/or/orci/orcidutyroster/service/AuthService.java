@@ -82,8 +82,8 @@ public class AuthService {
             throw new CustomException(roleValidationResult.getMessage());
         }
 
-        List<Workstation> workstationList = registerRequest.getWorkstationNames().stream().map(workstationRepository::findByName).toList();
-        newUser.setWorkstations(workstationList);
+//        List<Workstation> workstationList = registerRequest.getWorkstationNames().stream().map(workstationRepository::findByName).toList();
+//        newUser.setWorkstations(workstationList);
 
         User savedUser = userRepository.save(newUser);
 
@@ -117,8 +117,8 @@ public class AuthService {
             throw new CustomException(roleValidationResult.getMessage());
         }
 
-        List<Workstation> workstationList = registerRequest.getWorkstationNames().stream().map(workstationRepository::findByName).toList();
-        newUser.setWorkstations(workstationList);
+//        List<Workstation> workstationList = registerRequest.getWorkstationNames().stream().map(workstationRepository::findByName).toList();
+//        newUser.setWorkstations(workstationList);
 
         if (registerRequest.getUserDesignationId() != null) {
             UserDesignation userDesignation = userDesignationRepository.findById(registerRequest.getUserDesignationId()).orElseThrow(() -> new EntityNotFoundException("User Designation with Id " + registerRequest.getUserDesignationId() + " not found."));

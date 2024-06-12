@@ -36,7 +36,8 @@ public class ApplicationConfig {
         return new UserDetailsService() {
             @Override
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-                return userRepository.findByUsernameIgnoreCase(username).orElseThrow(() -> new UsernameNotFoundException("Username not found"));
+                return userRepository.findByUsernameIgnoreCase(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
             }
         };
     }
@@ -49,7 +50,8 @@ public class ApplicationConfig {
             public Optional<String> getCurrentAuditor() {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-                if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
+                if (authentication == null || !authentication.isAuthenticated()
+                        || authentication instanceof AnonymousAuthenticationToken) {
                     return Optional.empty();
                 }
 

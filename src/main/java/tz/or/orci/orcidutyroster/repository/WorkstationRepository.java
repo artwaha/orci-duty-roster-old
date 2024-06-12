@@ -2,10 +2,11 @@ package tz.or.orci.orcidutyroster.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import tz.or.orci.orcidutyroster.model.entities.Workstation;
-import tz.or.orci.orcidutyroster.model.enums.WorkstationEnum;
+
+import java.util.Optional;
 
 public interface WorkstationRepository extends JpaRepository<Workstation, Long> {
-    Workstation findByName(WorkstationEnum name);
+    Optional<Workstation> findByName(String name);
 
-    boolean existsByName(WorkstationEnum name);
+    boolean existsByName(String name);
 }

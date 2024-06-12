@@ -1,0 +1,20 @@
+departments:
+  - name: DEPARTMENT_ONE
+    workstations:
+      - WORKSTATION_ONE
+      - WORKSTATION_TWO
+      - WORKSTATION_THREE
+    shifts:
+      - MORNING_SHIFT
+      - AFTERNOON_SHIFT
+      - NIGHT_SHIFT
+    userDesignations:
+      - NURSE
+      - HEALTH_ATTENDANT
+  - name: DEPARTMENT_TWO
+    workstations:
+      - WORKSTATION_FOUR
+      - WORKSTATION_FIVE
+    shifts:
+      - CONSULTANT
+      - ON_CALL
